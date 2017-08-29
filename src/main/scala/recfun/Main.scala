@@ -20,7 +20,24 @@ object Main {
   /**
    * Exercise 2
    */
-    def balance(chars: List[Char]): Boolean = ???
+    def balance(chars: List[Char]): Boolean = {
+      val containsOpenBracket = chars.contains('(')
+      val containsCloseBracket = chars.contains(')')
+      val openBracketLastIndex = chars.lastIndexOf('(')
+      val closeBracketAfterOpenIndex = chars.indexOf(')', openBracketLastIndex)
+      val closeBracketIsAfterOpenBracket = closeBracketAfterOpenIndex > openBracketLastIndex
+
+      def balanceCharsInnerParentheses : Boolean = {
+        val charsWithoutLastBalanceBrackets = chars
+          .zipWithIndex
+          .filter { case (_, index) => index < openBracketLastIndex && index > closeBracketAfterOpenIndex }
+          .map(_._1)
+        openBracketLastIndex + 1 == closeBracketAfterOpenIndex || balance(charsWithoutLastBalanceBrackets)
+      }
+
+      if(containsOpenBracket && containsCloseBracket && closeBracketIsAfterOpenBracket) balanceCharsInnerParentheses
+      else !containsOpenBracket && !containsCloseBracket
+    }
   
   /**
    * Exercise 3
